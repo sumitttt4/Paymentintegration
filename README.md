@@ -1,21 +1,21 @@
-# DodoStarter 🚀
+# DodoStarter
 
-**DodoStarter** is a polished, developer-first Next.js SaaS starter kit pre-configured with Better Auth and Dodo Payments for subscription checkouts, self-service customer billing portals, and automated Postgres database sync via webhooks.
+DodoStarter is a polished, developer-first Next.js SaaS starter kit pre-configured with Better Auth and Dodo Payments for subscription checkouts, self-service customer billing portals, and automated Postgres database sync via webhooks.
 
 ![DodoStarter Screenshot](public/screenshot.png)
 
 ---
 
-## ⚡ Prerequisites
+## Prerequisites
 
 To start building, ensure you have:
-- **Node.js** (v18+ recommended)
-- A **[Dodo Payments](https://dodopayments.com)** Account (for sandbox/live API access)
-- A **[Neon Postgres](https://neon.tech)** Database connection string (or any other Postgres instance)
+- Node.js (v18+ recommended)
+- A Dodo Payments Account (for sandbox/live API access)
+- A Neon Postgres Database connection string (or any other Postgres instance)
 
 ---
 
-## 🛠️ Step-by-Step Setup
+## Step-by-Step Setup
 
 ### 1. Clone the Repository & Install Dependencies
 
@@ -98,7 +98,7 @@ Visit `http://localhost:3000` locally.
 
 ---
 
-## 🧪 Testing Checkouts
+## Testing Checkouts
 
 To verify the checkout flow locally:
 1. Navigate to the login page and sign up a new account. A Dodo Payments customer profile is automatically provisioned and synced to the database.
@@ -110,7 +110,7 @@ To verify the checkout flow locally:
 
 ---
 
-## 🚀 Deploy to Vercel
+## Deploy to Vercel
 
 1. Commit your codebase and push to a private/public GitHub repository.
 2. Import the project in Vercel.
@@ -120,6 +120,6 @@ To verify the checkout flow locally:
 
 ---
 
-## 📄 License
+## License
 
 This project is open-source and licensed under the [MIT License](LICENSE).

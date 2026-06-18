@@ -278,7 +278,7 @@ function FeaturesSection() {
             </p>
           </div>
           <div className="pt-6 border-t border-[var(--border)] mt-6 flex items-center gap-1.5 text-xs text-[var(--text-muted)] font-mono">
-            <span className="text-[var(--color-accent-500)]">✓</span> createCustomerOnSignUp: true
+            <Check className="w-3.5 h-3.5 text-[var(--color-accent-500)] shrink-0" /> createCustomerOnSignUp: true
           </div>
         </div>
 
@@ -294,7 +294,7 @@ function FeaturesSection() {
             </p>
           </div>
           <div className="pt-6 border-t border-[var(--border)] mt-6 flex items-center gap-1.5 text-xs text-[var(--text-muted)] font-mono">
-            <span className="text-[var(--color-accent-500)]">✓</span> MoR VAT Compliance
+            <Check className="w-3.5 h-3.5 text-[var(--color-accent-500)] shrink-0" /> MoR VAT Compliance
           </div>
         </div>
 
@@ -310,7 +310,7 @@ function FeaturesSection() {
             </p>
           </div>
           <div className="pt-6 border-t border-[var(--border)] mt-6 flex items-center gap-1.5 text-xs text-[var(--text-muted)] font-mono">
-            <span className="text-[var(--color-accent-500)]">✓</span> Secure Webhook Signatures
+            <Check className="w-3.5 h-3.5 text-[var(--color-accent-500)] shrink-0" /> Secure Webhook Signatures
           </div>
         </div>
 
@@ -327,7 +327,7 @@ function FeaturesSection() {
             </p>
           </div>
           <div className="pt-6 border-t border-[var(--border)] mt-6 flex items-center gap-1.5 text-xs text-[var(--text-muted)] font-mono">
-            <span className="text-[var(--color-accent-500)]">✓</span> authClient.dodopayments.customer.portal()
+            <Check className="w-3.5 h-3.5 text-[var(--color-accent-500)] shrink-0" /> authClient.dodopayments.customer.portal()
           </div>
         </div>
       </div>
@@ -512,7 +512,7 @@ function Footer() {
           <span className="font-bold text-sm tracking-tight text-[var(--text-primary)]">DodoStarter</span>
         </div>
         <p className="text-xs text-[var(--text-muted)]">
-          Open source starter kit. Built with ♥ and{" "}
+          Open source starter kit. Powered by{" "}
           <a
             href="https://dodopayments.com"
             target="_blank"
