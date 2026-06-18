@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ──────────────────────────────────────────────── */
+
+@theme {
+  /* Brand palette (Navies) */
+  --color-brand-50: #f4f5f6;
+  --color-brand-100: #e2e4e8;
+  --color-brand-200: #c5c9d1;
+  --color-brand-300: #9ba3b3;
+  --color-brand-400: #6c7991;
+  --color-brand-500: #0B1020; /* Deep navy */
+  --color-brand-600: #090d1a;
+  --color-brand-700: #050714;
+
+  /* Accent (Dodo Lime Green) */
+  --color-accent-400: #d5fa50;
+  --color-accent-500: #B3E910; /* Dodo lime green */
+  --color-accent-600: #9ecb18;
+
+  /* Surface colors for glassmorphism */
+  --color-surface-light: rgba(255, 255, 255, 0.75);
+  --color-surface-dark: rgba(11, 16, 32, 0.8);
+
+  /* Typography — uses CSS variable set by next/font */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #0B1020;
+    --text-secondary: #475569;
+    --text-muted: #8a94a6;
+    --border: #e2e8f0;
+    --card-bg: #ffffff;
+    --card-border: rgba(11, 16, 32, 0.06);
+    --glow: rgba(179, 233, 16, 0.08);
+    --dot-color: rgba(15, 23, 42, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --bg: #050714;
+      --bg-secondary: #0B1020;
+      --text-primary: #f4f5f6;
+      --text-secondary: #9ba3b3;
+      --text-muted: #6c7991;
+      --border: #1e293b;
+      --card-bg: rgba(11, 16, 32, 0.6);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --glow: rgba(179, 233, 16, 0.05);
+      --dot-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-accent-500);
+    color: var(--color-brand-500);
+  }
+}
+
+/* ─── Utility Classes ────────────────────────────────────────────── */
+
+@layer utilities {
+  .glass {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass:hover {
+    border-color: rgba(179, 233, 16, 0.35);
+    box-shadow: 0 8px 30px var(--glow);
+    transform: translateY(-2px);
+  }
+
+  .glass-strong {
+    background: var(--card-bg);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid var(--card-border);
+  }
+
+  .glow {
+    box-shadow: 0 0 40px var(--glow), 0 0 80px var(--glow);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--text-primary) 10%, var(--color-accent-600) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-border {
+    position: relative;
+    border: none;
+  }
+
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.2px;
+    background: linear-gradient(135deg, rgba(179, 233, 16, 0.4), rgba(255, 255, 255, 0.1));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  .animate-glow-pulse {
+    animation: glowPulse 4s ease-in-out infinite;
+  }
+
+  .dot-grid {
+    background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 30px var(--glow); }
+  50% { box-shadow: 0 0 60px var(--glow), 0 0 90px var(--glow); }
+}
+
+/* ─── Component Styles ───────────────────────────────────────────── */
+
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.6rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 0.5rem;
+    background: var(--color-accent-500);
+    color: #050714;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 12px rgba(179, 233, 16, 0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    background: #c6fe1e;
+    box-shadow: 0 6px 16px rgba(179, 233, 16, 0.35);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.6rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-accent-500);
+    color: var(--color-accent-500);
+    background: rgba(179, 233, 16, 0.05);
+    box-shadow: 0 4px 12px rgba(179, 233, 16, 0.05);
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .input-field:focus {
+    border-color: var(--color-accent-500);
+    box-shadow: 0 0 0 3px rgba(179, 233, 16, 0.15);
+  }
+
+  .input-field::placeholder {
+    color: var(--text-muted);
+  }
+
+  .card {
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover {
+    border-color: rgba(179, 233, 16, 0.3);
+    box-shadow: 0 8px 32px var(--glow);
+    transform: translateY(-2px);
+  }
+}
+
