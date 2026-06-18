@@ -18,60 +18,11 @@ import {
   Copy,
   Info,
   ArrowUpRight,
+  Play,
+  RefreshCw,
+  UserPlus,
 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
-
-// ─── Pricing Config ─────────────────────────────────────────────
-
-const PLANS = [
-  {
-    name: "Starter",
-    price: "Free",
-    period: "",
-    description: "For side projects and experiments",
-    features: [
-      "Up to 100 users",
-      "Basic analytics",
-      "Community support",
-      "1 project",
-    ],
-    slug: null,
-    popular: false,
-  },
-  {
-    name: "Pro",
-    price: "$29",
-    period: "/mo",
-    description: "For growing SaaS businesses",
-    features: [
-      "Unlimited users",
-      "Advanced analytics",
-      "Priority support",
-      "Unlimited projects",
-      "Custom domain",
-      "API access",
-    ],
-    slug: "pro-plan",
-    popular: true,
-  },
-  {
-    name: "Enterprise",
-    price: "$99",
-    period: "/mo",
-    description: "For teams that need everything",
-    features: [
-      "Everything in Pro",
-      "SSO & SAML",
-      "Dedicated support",
-      "Custom integrations",
-      "SLA guarantee",
-      "Audit logs",
-    ],
-    slug: "enterprise-plan",
-    popular: false,
-  },
-];
+import { useState, useEffect } from "react";
 
 // ─── Page Component ─────────────────────────────────────────────
 
@@ -88,7 +39,11 @@ export default function LandingPage() {
       {/* Visual gradient border line separating Hero and Bento Features */}
       <div className="h-[1px] w-full max-w-7xl mx-auto bg-gradient-to-r from-transparent via-[var(--color-accent-500)]/30 to-transparent" />
       <FeaturesSection />
-      <PricingSection />
+      {/* Visual gradient border line separating Bento Features and Checkout Simulator */}
+      <div className="h-[1px] w-full max-w-7xl mx-auto bg-gradient-to-r from-transparent via-[var(--color-accent-500)]/30 to-transparent" />
+      <CheckoutDemoSimulator />
+      {/* Visual gradient border line separating Checkout Simulator and CTA */}
+      <div className="h-[1px] w-full max-w-7xl mx-auto bg-gradient-to-r from-transparent via-[var(--color-accent-500)]/30 to-transparent" />
       <CTASection />
       <Footer />
     </div>
@@ -145,11 +100,11 @@ function HeroSection() {
               <ArrowUpRight className="w-4 h-4" />
             </a>
             <Link
-              href="/#pricing"
+              href="/#demo"
               className="btn-secondary text-sm px-7 py-3 hover:-translate-y-[1px] active:scale-[0.98] transition-all"
               id="hero-secondary-demo"
             >
-              Test Checkout Demo
+              Try Interactive Demo
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -335,135 +290,6 @@ function FeaturesSection() {
   );
 }
 
-// ─── Pricing Section (Showcase/Demo Component) ───────────────────
-
-function PricingSection() {
-  return (
-    <section id="pricing" className="px-6 py-20 md:py-24 bg-[var(--bg-secondary)] border-y border-[var(--border)]">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-[var(--bg)] border border-[var(--border)] px-3 py-1 rounded text-xs font-mono text-[var(--text-secondary)] mb-3">
-              <Info className="w-3.5 h-3.5 text-[var(--color-accent-500)]" />
-              Included Demo Component
-            </div>
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-[var(--text-primary)]">
-              Example pricing page template
-            </h2>
-            <p className="text-[var(--text-secondary)] text-sm md:text-base leading-relaxed mt-2">
-              This pricing section is included in the codebase and comes fully integrated.
-              Clicking a plan demonstrates the secure, authenticated redirect to Dodo Payments&apos; checkout.
-            </p>
-          </div>
-        </div>
-
-        {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
-          {PLANS.map((plan) => (
-            <PricingCard key={plan.name} plan={plan} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PricingCard({
-  plan,
-}: {
-  plan: (typeof PLANS)[number];
-}) {
-  const [loading, setLoading] = useState(false);
-
-  const handleCheckout = async () => {
-    if (!plan.slug) return;
-    setLoading(true);
-    try {
-      const { data, error } =
-        await authClient.dodopayments.checkoutSession({
-          slug: plan.slug,
-        });
-      if (error) {
-        window.location.href = "/login";
-        return;
-      }
-      if (data?.url) {
-        window.location.href = data.url;
-      }
-    } catch {
-      window.location.href = "/login";
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div
-      className={`relative rounded-xl p-8 transition-all duration-200 flex flex-col justify-between ${
-        plan.popular
-          ? "glass glow gradient-border scale-[1.01] border border-[var(--color-accent-500)]/30"
-          : "glass"
-      }`}
-    >
-      {plan.popular && (
-        <div className="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-[var(--color-accent-500)] text-[#050714] text-[10px] font-bold uppercase tracking-wider">
-          Included Example slug
-        </div>
-      )}
-
-      <div>
-        <div className="mb-6">
-          <h3 className="text-lg font-bold font-heading text-[var(--text-primary)] mb-1">{plan.name}</h3>
-          <p className="text-xs text-[var(--text-muted)] leading-relaxed">{plan.description}</p>
-        </div>
-
-        <div className="mb-8 flex items-baseline">
-          <span className="text-3xl font-extrabold text-[var(--text-primary)] font-heading">{plan.price}</span>
-          {plan.period && (
-            <span className="text-xs text-[var(--text-muted)] ml-1 font-mono">{plan.period}</span>
-          )}
-        </div>
-
-        <ul className="space-y-2.5 mb-8">
-          {plan.features.map((f) => (
-            <li key={f} className="flex items-start gap-2.5 text-xs text-[var(--text-secondary)]">
-              <Check className="w-4 h-4 text-[var(--color-accent-500)] mt-0.5 shrink-0" />
-              <span>{f}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {plan.slug ? (
-        <button
-          onClick={handleCheckout}
-          disabled={loading}
-          className={`w-full ${plan.popular ? "btn-primary" : "btn-secondary"} text-xs py-2.5`}
-          id={`pricing-${plan.slug}`}
-        >
-          {loading ? (
-            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <>
-              Redirect to checkout
-              <ArrowRight className="w-3.5 h-3.5" />
-            </>
-          )}
-        </button>
-      ) : (
-        <Link
-          href="/login"
-          className={`w-full ${plan.popular ? "btn-primary" : "btn-secondary"} text-xs py-2.5`}
-          id="pricing-free"
-        >
-          Setup User Auth
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
-      )}
-    </div>
-  );
-}
-
 // ─── CTA Section ─────────────────────────────────────────────────
 
 function CTASection() {
@@ -499,18 +325,483 @@ function CTASection() {
   );
 }
 
+// ─── Checkout Simulator Section ──────────────────────────────────
+
+const RANDOM_PROFILES = [
+  { name: "Alex Rivera", email: "alex@example.com", customerId: "cust_91j81h2k" },
+  { name: "Alice Vance", email: "alice@example.com", customerId: "cust_3k92h4l9" },
+  { name: "David Miller", email: "david.m@example.com", customerId: "cust_8f2h1j8n" },
+  { name: "Elena Rostova", email: "elena@example.com", customerId: "cust_7g3k9j1a" },
+  { name: "Hiroshi Sato", email: "hiroshi@example.com", customerId: "cust_6f8n2k8l" },
+  { name: "Sophia Martinez", email: "sophia@example.com", customerId: "cust_5h9k3m2b" }
+];
+
+const SIMULATOR_STEPS = [
+  {
+    title: "1. User Registration",
+    shortDesc: "Sign-up triggers provisioning",
+    description: "When a developer or customer enters credentials, the authentication endpoint registers the account locally in your database.",
+    icon: UserPlus,
+    mockupType: "form" as const,
+  },
+  {
+    title: "2. Dodo Customer Sync",
+    shortDesc: "Automatic backfill & mapping",
+    description: "Better Auth's Dodo Payments plugin intercepts the sign-up, provisions a corresponding customer on Dodo Payments, and saves the unique 'dodoCustomerId' to your DB.",
+    icon: Zap,
+    mockupType: "schema" as const,
+  },
+  {
+    title: "3. Redirect to Checkout",
+    shortDesc: "Secure hosted checkout session",
+    description: "When the customer requests a premium subscription, your backend fetches an authenticated Checkout Session URL from Dodo Payments and redirects the user.",
+    icon: CreditCard,
+    mockupType: "checkout" as const,
+  },
+  {
+    title: "4. Webhook & Database Sync",
+    shortDesc: "Real-time payment sync",
+    description: "Once payment completes using a test credit card, Dodo Payments securely broadcasts a signed webhook payload ('subscription.active') back to your backend, syncing status automatically.",
+    icon: Webhook,
+    mockupType: "webhook" as const,
+  },
+  {
+    title: "5. Access Unlocked",
+    shortDesc: "Premium features activated",
+    description: "The customer is returned safely to your application dashboard. Their active subscription status is read, unlocking paid access and rendering customer billing portal access.",
+    icon: Shield,
+    mockupType: "dashboard" as const,
+  }
+];
+
+function CheckoutDemoSimulator() {
+  const [activeStep, setActiveStep] = useState(0);
+  const [activeTab, setActiveTab] = useState<"mockup" | "logs">("mockup");
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [profile, setProfile] = useState(RANDOM_PROFILES[0]);
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * RANDOM_PROFILES.length);
+    setProfile(RANDOM_PROFILES[randomIndex]);
+  }, []);
+
+  const currentStep = SIMULATOR_STEPS[activeStep];
+
+  const rotateProfile = () => {
+    const currentIndex = RANDOM_PROFILES.findIndex((p) => p.email === profile.email);
+    const nextIndex = (currentIndex + 1) % RANDOM_PROFILES.length;
+    setProfile(RANDOM_PROFILES[nextIndex]);
+  };
+
+  const handleNext = () => {
+    setActiveStep((prev) => (prev + 1) % SIMULATOR_STEPS.length);
+  };
+
+  const handlePrev = () => {
+    setActiveStep((prev) => (prev - 1 + SIMULATOR_STEPS.length) % SIMULATOR_STEPS.length);
+  };
+
+  const runSimulation = () => {
+    if (isSimulating) return;
+    setIsSimulating(true);
+    setActiveStep(0);
+    rotateProfile();
+    
+    let step = 0;
+    const interval = setInterval(() => {
+      step++;
+      if (step < SIMULATOR_STEPS.length) {
+        setActiveStep(step);
+      } else {
+        clearInterval(interval);
+        setIsSimulating(false);
+      }
+    }, 3500);
+  };
+
+  const getTerminalLogs = (stepIdx: number) => {
+    switch (stepIdx) {
+      case 0:
+        return `[AUTH] Request: POST /api/auth/signup
+[AUTH] Creating new user record in PostgreSQL...
+[DB] INSERT INTO users (id, name, email) VALUES (1, '${profile.name}', '${profile.email}')
+[DB] User registered successfully.`;
+      case 1:
+        return `[DODO PLUGIN] Intercepted user signup for ${profile.email}
+[DODO API] Requesting customer creation...
+[DODO API] POST https://api.dodopayments.com/v1/customers
+[DODO API] Response: 201 Created (ID: ${profile.customerId})
+[DB] UPDATE users SET dodoCustomerId = '${profile.customerId}' WHERE id = 1`;
+      case 2:
+        return `[API] Request: POST /api/auth/dodopayments/checkout-session
+[API] Generating checkout session for ${profile.customerId}...
+[DODO API] POST https://api.dodopayments.com/v1/checkout-sessions
+[DODO API] Response: 200 OK (URL: https://checkout.dodopayments.com/buy/session_9a8b7c)
+[REDIRECT] Redirecting browser session to checkout portal...`;
+      case 3:
+        return `[WEBHOOK] Received payload from Dodo Payments
+[WEBHOOK] Validating headers and signature... OK
+[WEBHOOK] Event type: subscription.active
+[DB] INSERT INTO subscriptions (id, userId, status, planId, currency) 
+     VALUES ('sub_38a2', 1, 'active', 'pdt_pro', 'USD')
+[DB] Database state synchronized.`;
+      case 4:
+        return `[CLIENT] Navigation redirect: /dashboard?checkout=success
+[API] Request: GET /api/user/subscription
+[API] Response: 200 OK (status: ACTIVE)
+[CLIENT] Subscription status active. Unlocking dashboard panels...`;
+      default:
+        return "";
+    }
+  };
+
+  return (
+    <section id="demo" className="px-6 py-20 md:py-24 bg-[var(--bg-secondary)] relative overflow-hidden">
+      {/* Background radial glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-[var(--color-accent-500)]/5 to-transparent blur-[120px] pointer-events-none -z-10" />
+      
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-16 text-left max-w-3xl">
+          <span className="text-xs font-bold font-mono uppercase tracking-widest text-[var(--color-accent-500)]">Integration Blueprint</span>
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight mt-2 mb-4 text-[var(--text-primary)]">
+            How does it work? Run the checkout demo.
+          </h2>
+          <p className="text-[var(--text-secondary)] text-sm md:text-base leading-relaxed">
+            See exactly what happens from the moment a user signs up to when their subscription is provisioned, paid, and synced to your database in real time.
+          </p>
+        </div>
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Side: Stepper Navigation (5 columns) */}
+          <div className="lg:col-span-5 space-y-4">
+            {SIMULATOR_STEPS.map((step, idx) => {
+              const StepIcon = step.icon;
+              const isActive = idx === activeStep;
+              return (
+                <button
+                  key={step.title}
+                  onClick={() => {
+                    setActiveStep(idx);
+                    setIsSimulating(false);
+                  }}
+                  className={`w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? "glass-strong border-[var(--color-accent-500)]/40 shadow-lg"
+                      : "glass border-transparent hover:border-[var(--border)] opacity-60 hover:opacity-90"
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`p-2 rounded-lg border transition-colors ${
+                      isActive 
+                        ? "bg-[var(--color-accent-500)]/10 border-[var(--color-accent-500)]/30 text-[var(--color-accent-500)]" 
+                        : "bg-[var(--bg)] border-[var(--border)] text-[var(--text-muted)]"
+                    }`}>
+                      <StepIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className={`text-sm font-bold font-heading transition-colors ${
+                        isActive ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]"
+                      }`}>
+                        {step.title}
+                      </h4>
+                      <p className="text-xs text-[var(--text-muted)] mt-1">
+                        {step.shortDesc}
+                      </p>
+                    </div>
+                  </div>
+                  {isActive && (
+                    <div className="mt-3 pl-14 text-xs text-[var(--text-secondary)] leading-relaxed animate-fade-in">
+                      {step.description}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+
+            {/* Stepper Actions */}
+            <div className="pt-4 flex flex-wrap items-center gap-3">
+              <button
+                onClick={runSimulation}
+                disabled={isSimulating}
+                className="btn-primary text-xs py-2.5 px-5 hover:-translate-y-[1px] active:scale-[0.98] transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                {isSimulating ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    Simulating...
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    Autoplay Demo
+                  </>
+                )}
+              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handlePrev}
+                  className="p-2 rounded-lg glass border border-[var(--border)] hover:border-[var(--color-accent-500)]/30 text-xs transition-colors hover:text-[var(--color-accent-500)] cursor-pointer"
+                  title="Previous Step"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="p-2 rounded-lg glass border border-[var(--border)] hover:border-[var(--color-accent-500)]/30 text-xs transition-colors hover:text-[var(--color-accent-500)] cursor-pointer"
+                  title="Next Step"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Interactive Dynamic Screen (7 columns) */}
+          <div className="lg:col-span-7 w-full">
+            <div className="glass rounded-2xl border border-[var(--card-border)] shadow-2xl overflow-hidden relative">
+              {/* Window Header */}
+              <div className="bg-zinc-950/80 px-4 py-3 border-b border-[var(--border)] flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/40" />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveTab("mockup")}
+                    className={`px-3 py-1 rounded text-xs font-medium transition-all cursor-pointer ${
+                      activeTab === "mockup"
+                        ? "bg-zinc-800 text-[var(--color-accent-500)]"
+                        : "text-zinc-500 hover:text-zinc-300"
+                    }`}
+                  >
+                    Interactive Mockup
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("logs")}
+                    className={`px-3 py-1 rounded text-xs font-medium transition-all cursor-pointer ${
+                      activeTab === "logs"
+                        ? "bg-zinc-800 text-[var(--color-accent-500)]"
+                        : "text-zinc-500 hover:text-zinc-300"
+                    }`}
+                  >
+                    Terminal Logs
+                  </button>
+                </div>
+                <div className="w-12" />
+              </div>
+
+              {/* Dynamic Viewport Container */}
+              <div className="p-6 min-h-[380px] bg-zinc-950/20 flex flex-col justify-center">
+                {activeTab === "logs" ? (
+                  <div className="font-mono text-xs leading-relaxed text-zinc-400 p-4 bg-zinc-950/80 rounded-xl border border-zinc-900 shadow-inner select-all whitespace-pre-wrap">
+                    <div className="flex items-center justify-between text-[10px] text-zinc-600 pb-2 mb-3 border-b border-zinc-900">
+                      <span>do-do-starter-server.log</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse" />
+                    </div>
+                    {getTerminalLogs(activeStep)}
+                  </div>
+                ) : (
+                  <div className="w-full flex items-center justify-center animate-fade-in">
+                    {/* Render active mockup representation */}
+                    {currentStep.mockupType === "form" && (
+                      <div className="w-full max-w-xs p-6 glass rounded-xl border border-[var(--border)] text-left">
+                        <div className="flex justify-between items-center mb-4">
+                          <h4 className="text-sm font-bold font-heading text-[var(--text-primary)]">Create Account</h4>
+                          <button
+                            onClick={rotateProfile}
+                            className="text-[10px] font-bold text-[var(--color-accent-500)] hover:underline flex items-center gap-1 cursor-pointer"
+                          >
+                            <RefreshCw className="w-3 h-3" />
+                            Random User
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[var(--text-muted)] mb-1">Full Name</label>
+                            <input
+                              type="text"
+                              value={profile.name}
+                              disabled
+                              className="w-full px-3 py-1.5 rounded bg-zinc-900 border border-zinc-800 text-xs text-[var(--text-primary)] focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[var(--text-muted)] mb-1">Email</label>
+                            <input
+                              type="email"
+                              value={profile.email}
+                              disabled
+                              className="w-full px-3 py-1.5 rounded bg-zinc-900 border border-zinc-800 text-xs text-[var(--text-primary)] focus:outline-none"
+                            />
+                          </div>
+                          <button
+                            onClick={() => {
+                              setActiveStep(1);
+                              setIsSimulating(false);
+                            }}
+                            className="w-full btn-primary text-xs py-2 mt-2 flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            Submit Credentials
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep.mockupType === "schema" && (
+                      <div className="w-full max-w-sm p-4 space-y-4">
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                          <div className="p-3 bg-zinc-900 border border-zinc-800 rounded-lg text-center w-full md:w-36 font-sans">
+                            <p className="text-[10px] font-mono text-[var(--text-muted)]">LOCAL POSTGRES</p>
+                            <p className="text-xs font-bold text-[var(--text-primary)] mt-1 truncate" title={profile.email}>{profile.email}</p>
+                            <div className="inline-flex mt-2 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-mono text-emerald-400">
+                              {profile.customerId}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col items-center gap-1 text-[var(--color-accent-500)]">
+                            <span className="text-[9px] font-mono font-bold tracking-wider">SYNCED</span>
+                            <ArrowRight className="w-5 h-5 hidden md:block" />
+                          </div>
+
+                          <div className="p-3 bg-zinc-900 border border-zinc-800 rounded-lg text-center w-full md:w-36 font-sans">
+                            <p className="text-[10px] font-mono text-[var(--text-muted)]">DODO CUSTOMERS</p>
+                            <p className="text-xs font-bold text-[var(--text-primary)] mt-1 truncate" title={profile.name}>{profile.name}</p>
+                            <div className="inline-flex mt-2 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-mono text-emerald-400">
+                              Active Profile
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-[var(--text-muted)] text-center italic">
+                          Better Auth automatically maps the customer ID back to your local user schema.
+                        </p>
+                      </div>
+                    )}
+
+                    {currentStep.mockupType === "checkout" && (
+                      <div className="w-full max-w-xs p-5 bg-zinc-900/95 border border-zinc-800 rounded-xl shadow-xl text-left">
+                        <div className="flex justify-between items-center pb-3 border-b border-zinc-800 mb-4">
+                          <span className="text-[10px] font-mono uppercase text-zinc-500 font-bold">Dodo Payments Checkout</span>
+                          <span className="text-[10px] font-semibold text-[var(--color-accent-500)] bg-[var(--color-accent-500)]/10 px-1.5 py-0.5 rounded">TEST_MODE</span>
+                        </div>
+                        <div className="space-y-3 text-xs">
+                          <div className="flex justify-between">
+                            <span className="text-zinc-400">Subscription Item:</span>
+                            <span className="font-bold text-zinc-200">Pro Plan</span>
+                          </div>
+                          <div className="flex justify-between pb-3 border-b border-zinc-800">
+                            <span className="text-zinc-400">Amount due:</span>
+                            <span className="font-extrabold text-[var(--color-accent-500)]">$29.00 / month</span>
+                          </div>
+                          <div className="p-2.5 rounded bg-zinc-950 border border-zinc-800 space-y-1.5">
+                            <label className="text-[9px] text-zinc-500 block uppercase font-bold">Credit Card</label>
+                            <input
+                              type="text"
+                              value="4242 •••• •••• 4242"
+                              disabled
+                              className="w-full bg-zinc-900 border border-zinc-800 text-[11px] py-1 px-2 text-zinc-300 rounded focus:outline-none"
+                            />
+                          </div>
+                          <button
+                            onClick={() => {
+                              setActiveStep(3);
+                              setIsSimulating(false);
+                            }}
+                            className="w-full btn-primary text-xs py-2 mt-2 flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            Pay with Test Card
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep.mockupType === "webhook" && (
+                      <div className="w-full max-w-md p-4 bg-zinc-950 rounded-xl border border-zinc-900 font-mono text-[10px] text-zinc-400 text-left select-all">
+                        <div className="flex items-center justify-between pb-2 mb-2 border-b border-zinc-900 text-[9px] text-zinc-500">
+                          <span>payload: subscription.active</span>
+                          <span className="text-emerald-400 font-semibold font-mono">200 RECEIVED</span>
+                        </div>
+                        <p className="text-amber-500">&#123;</p>
+                        <p>&nbsp;&nbsp;<span className="text-sky-400">&quot;event&quot;</span>: <span className="text-emerald-400">&quot;subscription.active&quot;</span>,</p>
+                        <p>&nbsp;&nbsp;<span className="text-sky-400">&quot;data&quot;</span>: &#123;</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-sky-400">&quot;subscription_id&quot;</span>: <span className="text-emerald-400">&quot;sub_38a2&quot;</span>,</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-sky-400">&quot;customer_id&quot;</span>: <span className="text-emerald-400">&quot;${profile.customerId}&quot;</span>,</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-sky-400">&quot;status&quot;</span>: <span className="text-emerald-400">&quot;active&quot;</span>,</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-sky-400">&quot;product_id&quot;</span>: <span className="text-emerald-400">&quot;pdt_pro&quot;</span></p>
+                        <p>&nbsp;&nbsp;&#125;</p>
+                        <p className="text-amber-500">&#125;</p>
+                      </div>
+                    )}
+
+                    {currentStep.mockupType === "dashboard" && (
+                      <div className="w-full max-w-sm p-4 bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl text-left relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-[30px] pointer-events-none" />
+                        <div className="flex justify-between items-center mb-4">
+                          <div>
+                            <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-wider">Account Billing</p>
+                            <p className="text-xs font-bold text-zinc-200">{profile.name}</p>
+                          </div>
+                          <div className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-semibold text-emerald-400">
+                            PRO ACTIVE
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-between mb-4">
+                          <div>
+                            <p className="text-[9px] text-zinc-500">CURRENT PLAN</p>
+                            <p className="text-xs font-bold text-[var(--text-primary)]">Pro Subscription</p>
+                          </div>
+                          <span className="text-[10px] font-bold text-[var(--color-accent-500)]">$29/month</span>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2">
+                          <span className="text-[10px] text-zinc-500">Need to cancel or update details?</span>
+                          <button
+                            onClick={() => {
+                              alert("In a real app, this redirects to your Dodo secure customer billing portal!");
+                            }}
+                            className="text-[10px] font-bold text-[var(--color-accent-500)] hover:underline flex items-center gap-1.5 cursor-pointer"
+                          >
+                            Manage Billing Portal
+                            <ArrowUpRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Footer ──────────────────────────────────────────────────────
 
 function Footer() {
   return (
     <footer className="px-6 py-12 border-t border-[var(--border)]">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[var(--color-brand-500)] to-[var(--color-accent-500)] flex items-center justify-center">
-            <Zap className="w-3.5 h-3.5 text-white" />
-          </div>
-          <span className="font-bold text-sm tracking-tight text-[var(--text-primary)]">DodoStarter</span>
-        </div>
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 group"
+        >
+          <img
+            src="/icon.png"
+            alt="DoDo Starter"
+            className="w-8 h-8 rounded-lg object-contain group-hover:scale-105 transition-transform"
+          />
+          <span className="gradient-text font-extrabold text-lg tracking-tight">DoDo Starter</span>
+        </Link>
         <p className="text-xs text-[var(--text-muted)]">
           Open source starter kit. Powered by{" "}
           <a

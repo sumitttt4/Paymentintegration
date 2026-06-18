@@ -17,9 +17,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "DodoStarter — Ship Paid SaaS in Minutes",
+  title: "DoDo Starter — Next.js Payment Integration Template",
   description:
-    "The fastest way to launch a production-ready SaaS with authentication, billing, and subscription management. Powered by Dodo Payments.",
+    "The fastest way to launch a free, open-source SaaS starter kit with Better Auth, Drizzle, and Dodo Payments integration.",
   keywords: [
     "SaaS starter kit",
     "Dodo Payments",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     "payment integration",
   ],
   openGraph: {
-    title: "DodoStarter — Ship Paid SaaS in Minutes",
+    title: "DoDo Starter — Next.js Payment Integration Template",
     description:
-      "Stop fighting payment integration. Ship a polished, paid SaaS in minutes with DodoStarter.",
+      "Stop fighting payment integration. Ship a polished SaaS starter kit with Better Auth, Drizzle, and Dodo Payments.",
     type: "website",
   },
 };

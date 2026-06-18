@@ -59,15 +59,16 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-md animate-slide-up">
-        {/* Logo */}
         <Link
           href="/"
-          className="flex items-center justify-center gap-2 mb-10"
+          className="flex items-center justify-center gap-2.5 group mb-10"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--color-brand-500)] to-[var(--color-accent-500)] flex items-center justify-center">
-            <Zap className="w-5 h-5 text-white" />
-          </div>
-          <span className="gradient-text text-2xl font-bold">DodoStarter</span>
+          <img
+            src="/icon.png"
+            alt="DoDo Starter"
+            className="w-8 h-8 rounded-lg object-contain group-hover:scale-105 transition-transform"
+          />
+          <span className="gradient-text font-extrabold text-lg tracking-tight">DoDo Starter</span>
         </Link>
 
         {/* Card */}

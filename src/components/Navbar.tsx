@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "@/lib/auth-client";
-import { Zap, LogOut, LayoutDashboard } from "lucide-react";
 
 export function Navbar() {
-  const { data: session, isPending } = useSession();
   const pathname = usePathname();
 
   return (
@@ -15,13 +12,15 @@ export function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 font-bold text-lg group"
+          className="flex items-center gap-2.5 group"
           id="nav-logo"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-brand-500)] to-[var(--color-accent-500)] flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Zap className="w-4 h-4 text-white" />
-          </div>
-          <span className="gradient-text">DodoStarter</span>
+          <img
+            src="/icon.png"
+            alt="DoDo Starter"
+            className="w-8 h-8 rounded-lg object-contain group-hover:scale-105 transition-transform"
+          />
+          <span className="gradient-text font-extrabold text-lg tracking-tight">DoDo Starter</span>
         </Link>
 
         {/* Nav links */}
@@ -35,39 +34,26 @@ export function Navbar() {
             Features
           </Link>
           <Link
-            href="/#pricing"
-            className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--color-accent-500)] transition-colors"
+            href="/#demo"
+            className={`text-sm font-medium transition-colors hover:text-[var(--color-accent-500)] ${
+              pathname === "/" ? "text-[var(--text-secondary)]" : "text-[var(--text-muted)]"
+            }`}
           >
-            Pricing
+            Interactive Demo
           </Link>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-
-          {isPending ? (
-            <div className="w-20 h-9 rounded-lg bg-[var(--border)] animate-pulse" />
-          ) : session?.user ? (
-            <div className="flex items-center gap-2">
-              <Link href="/dashboard" className="btn-secondary text-sm py-2 px-4" id="nav-dashboard">
-                <LayoutDashboard className="w-4 h-4" />
-                Dashboard
-              </Link>
-              <button
-                onClick={() => signOut()}
-                className="p-2 rounded-lg border border-[var(--border)] hover:border-red-400 
-                  hover:text-red-400 transition-all text-[var(--text-muted)] cursor-pointer"
-                aria-label="Sign out"
-                id="nav-signout"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
-          ) : (
-            <Link href="/login" className="btn-primary text-sm py-2 px-5" id="nav-login">
-              Get Started
-            </Link>
-          )}
+          <a
+            href="https://github.com/sumitttt4/Paymentintegration"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary text-sm py-2 px-5"
+            id="nav-github"
+          >
+            GitHub
+          </a>
         </div>
       </nav>
     </header>
