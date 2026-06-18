@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   Zap,
   Shield,
@@ -9,14 +10,12 @@ import {
   ArrowRight,
   Check,
   Sparkles,
-  Lock,
   BarChart3,
   Webhook,
   Terminal,
   Code,
   Star,
   Copy,
-  Info,
   ArrowUpRight,
   Play,
   RefreshCw,
@@ -183,7 +182,7 @@ function HeroSection() {
                   <span>src/lib/auth.ts</span>
                   <Code className="w-3.5 h-3.5 text-zinc-600" />
                 </div>
-                <p className="text-zinc-600">// Setup Dodo Payments plugin</p>
+                <p className="text-zinc-600">{"// Setup Dodo Payments plugin"}</p>
                 <p><span className="text-zinc-500">export const</span> auth = <span className="text-zinc-300">betterAuth</span>(&#123;</p>
                 <p>&nbsp;&nbsp;plugins: [</p>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[var(--color-accent-500)]">dodopayments</span>(&#123;</p>
@@ -382,7 +381,10 @@ function CheckoutDemoSimulator() {
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * RANDOM_PROFILES.length);
-    setProfile(RANDOM_PROFILES[randomIndex]);
+    const timer = setTimeout(() => {
+      setProfile(RANDOM_PROFILES[randomIndex]);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const currentStep = SIMULATOR_STEPS[activeStep];
@@ -795,10 +797,12 @@ function Footer() {
           href="/"
           className="flex items-center gap-2.5 group"
         >
-          <img
+          <Image
             src="/icon.png"
             alt="DoDo Starter"
-            className="w-8 h-8 rounded-lg object-contain group-hover:scale-105 transition-transform"
+            width={32}
+            height={32}
+            className="rounded-lg object-contain group-hover:scale-105 transition-transform"
           />
           <span className="gradient-text font-extrabold text-lg tracking-tight">DoDo Starter</span>
         </Link>

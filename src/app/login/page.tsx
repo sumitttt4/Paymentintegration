@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
-import { Zap, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -63,10 +64,12 @@ export default function LoginPage() {
           href="/"
           className="flex items-center justify-center gap-2.5 group mb-10"
         >
-          <img
+          <Image
             src="/icon.png"
             alt="DoDo Starter"
-            className="w-8 h-8 rounded-lg object-contain group-hover:scale-105 transition-transform"
+            width={32}
+            height={32}
+            className="rounded-lg object-contain group-hover:scale-105 transition-transform"
           />
           <span className="gradient-text font-extrabold text-lg tracking-tight">DoDo Starter</span>
         </Link>

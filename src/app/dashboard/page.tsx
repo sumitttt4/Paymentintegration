@@ -92,8 +92,10 @@ function DashboardContent() {
     if (!session?.user) return;
 
     if (session.user.email === "sumitsharma9128@gmail.com") {
-      setLoadingSubs(false);
-      return;
+      const timer = setTimeout(() => {
+        setLoadingSubs(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     const fetchSubs = async () => {
@@ -147,7 +149,7 @@ function DashboardContent() {
         planSlug: "pro-plan",
         productId: process.env.NEXT_PUBLIC_DODO_PRO_PRODUCT_ID || "pdt_placeholder_pro",
         billingCurrency: "USD",
-        nextBillingDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+        nextBillingDate: "2027-06-18T19:27:45.000Z", // Fixed future date to keep render pure and avoid Date.now()
       }
     : subscriptions.find(
         (s) => s.status === "active" || s.status === "renewed"

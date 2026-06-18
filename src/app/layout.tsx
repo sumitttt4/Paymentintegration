@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
-import Script from "next/script";
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
 
